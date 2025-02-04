@@ -33,5 +33,20 @@ jobs:
            env:
                 GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
+                ## have github actons authenticate to aws thrrough OIDC
 
+         - name: auth to aws
+           uses: aws-actions/configure-aws-credentials@v3
+           with: 
+               role-to-assume: 
+               aws-region: us-east-1
+
+               ##use docker to containerise artifact
+
+         - name: build,tag and push
+           id: build-image
+           env:
+              REGISTRY:${{steps.login-ecr.outputs.registry}}
+              REPOSITORY:
+              IMAGE_TAG: ${{github.sha}} 
 
